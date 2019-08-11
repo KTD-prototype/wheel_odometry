@@ -27,6 +27,9 @@ PULSE_PER_ROUND = 0.0  # pulse per a round of the wheel
 WHEEL_DIAMETER = 0.0  # wheel diameter of the robot[m] : 6 inch
 TREAD = 0.0  # tread width of the robot[m]
 
+# other global parameters
+g_odometry_counts = 0
+
 
 def set_parameters():
     global PULSE_PER_ROUND, WHEEL_DIAMETER, TREAD
@@ -51,8 +54,11 @@ def callback_calculate_odometry(encoder_2wheel):
     delta_t = current_time - g_last_time
     g_last_time = current_time
 
-    calculate_odometry(encoder_left, encoder_right,
-                       g_last_encoder_left, g_last_encoder_right, delta_t)
+    # calculate odometry data
+    wheel_odometry_data = calculate_odometry(encoder_left, encoder_right,
+                                             g_last_encoder_left, g_last_encoder_right, delta_t)
+    # store message to topic
+    store_to_topic(wheel_odometry_data)
 
     # publish odometry
     wheel_odometry_2wheel_pub.publish(wheel_odometry_2wheel)
@@ -89,11 +95,11 @@ def calculate_odometry(enc_L, enc_R, last_enc_L, last_enc_R, dt):
     # calculate location : x[m]
     current_robot_location[0] = g_last_robot_location[0] + \
         ((delta_distance_left + delta_distance_right) / 2) * \
-        math.cos(last_robot_location[2])
+        math.cos(g_last_robot_location[2])
     # calculate location : y[m]
     current_robot_location[1] = g_last_robot_location[1] + \
         ((delta_distance_left + delta_distance_right) / 2) * \
-        math.sin(last_robot_location[2])
+        math.sin(g_last_robot_location[2])
     # calculate location : theta[rad]
     current_robot_location[2] = g_last_robot_location[2] + \
         (delta_distance_right - delta_distance_left) / TREAD
@@ -112,7 +118,27 @@ def calculate_odometry(enc_L, enc_R, last_enc_L, last_enc_R, dt):
 
     # store data as last data
     g_last_robot_location = current_robot_location
-    return current_robot_location, current_robot_velocity, current_robot_orientation
+
+    # merge to single 1 * 9 vector
+    odometry_data = current_robot_location
+    odometry_data.extend(current_robot_velocity)
+    odometry_data.extend(current_robot_orientation)
+    return odometry_data
+
+
+def store_to_topic(odometry_data_toStore):
+    global g_odometry_counts
+
+    wheel_odometry_2wheel.header.seq = g_odometry_counts
+    wheel_odometry_2wheel.pose.pose.position.x = odometry_data_toStore[0]
+    wheel_odometry_2wheel.pose.pose.position.y = odometry_data_toStore[1]
+    wheel_odometry_2wheel.twist.twist.linear.x = odometry_data_toStore[3]
+    wheel_odometry_2wheel.twist.twist.angular.z = odometry_data_toStore[4]
+    wheel_odometry_2wheel.pose.pose.orientation.x = odometry_data_toStore[5]
+    wheel_odometry_2wheel.pose.pose.orientation.y = odometry_data_toStore[6]
+    wheel_odometry_2wheel.pose.pose.orientation.z = odometry_data_toStore[7]
+    wheel_odometry_2wheel.pose.pose.orientation.w = odometry_data_toStore[8]
+    g_odometry_counts = g_odometry_counts + 1
 
 
 if __name__ == '__main__':
