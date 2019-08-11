@@ -9,7 +9,6 @@ import signal
 import sys
 import tf
 import math
-from std_msgs.msg import Int16
 from nav_msgs.msg import Odometry
 from wheel_odometry.msg import Encoder_2wheel
 
