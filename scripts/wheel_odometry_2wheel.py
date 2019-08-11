@@ -60,7 +60,7 @@ def callback_calculate_odometry(encoder_2wheel):
     # store message to topic
     store_to_topic(wheel_odometry_data)
 
-    # publish odometry
+    # publish topic for odometry
     wheel_odometry_2wheel_pub.publish(wheel_odometry_2wheel)
 
     # store last encoder data
@@ -78,7 +78,7 @@ def calculate_odometry(enc_L, enc_R, last_enc_L, last_enc_R, dt):
     current_robot_velocity = [0.0] * 2
     current_robot_orientation = [0.0] * 4
 
-    # calculate wheel movement
+    # calculate wheels' or robot's movement
     # difference of encoder count from last loop
     delta_encoder_left = enc_L - last_enc_L
     delta_encoder_right = enc_R - last_enc_R
@@ -92,17 +92,19 @@ def calculate_odometry(enc_L, enc_R, last_enc_L, last_enc_R, dt):
     wheel_velocity_right = delta_distance_right / dt
 
     # calculate current location of the robot
-    # calculate location : x[m]
-    current_robot_location[0] = g_last_robot_location[0] + \
-        ((delta_distance_left + delta_distance_right) / 2) * \
-        math.cos(g_last_robot_location[2])
-    # calculate location : y[m]
-    current_robot_location[1] = g_last_robot_location[1] + \
-        ((delta_distance_left + delta_distance_right) / 2) * \
-        math.sin(g_last_robot_location[2])
     # calculate location : theta[rad]
     current_robot_location[2] = g_last_robot_location[2] + \
         (delta_distance_right - delta_distance_left) / TREAD
+    # calculate mean value of robot's heading
+    heading_mean = (current_robot_location[2] + g_last_robot_location[2]) / 2
+    # calculate location : x[m]
+    current_robot_location[0] = g_last_robot_location[0] + \
+        ((delta_distance_left + delta_distance_right) / 2) * \
+        math.cos(heading_mean)
+    # calculate location : y[m]
+    current_robot_location[1] = g_last_robot_location[1] + \
+        ((delta_distance_left + delta_distance_right) / 2) * \
+        math.sin(heading_mean)
 
     # calculate current robot velocity
     # calculate linear velocity[m/s]
@@ -119,7 +121,7 @@ def calculate_odometry(enc_L, enc_R, last_enc_L, last_enc_R, dt):
     # store data as last data
     g_last_robot_location = current_robot_location
 
-    # merge to single 1 * 9 vector
+    # merge all data to single 1 * 9 vector
     odometry_data = current_robot_location
     odometry_data.extend(current_robot_velocity)
     odometry_data.extend(current_robot_orientation)
@@ -160,4 +162,6 @@ if __name__ == '__main__':
     set_parameters()
 
     # start running node
+    # callback function that calculate odometry and publish it will executed -
+    # every after this node subscribed encoder information
     rospy.spin()
