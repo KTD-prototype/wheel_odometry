@@ -40,9 +40,9 @@ def set_parameters():
         rospy.logwarn(
             "if you haven't set ros parameter indicates /pulse_per_round, /wheel_diameter, and /tread, Please command '$rosparam set /***' or set them in a launch file")
     else:
-        rospy.loginfo("you have set output pulse per wheel round : " + stf(PULSE_PER_ROUND) + " [ppr]")
-        rospy.loginfo("you have set diameter of the wheel : " + stf(WHEEL_DIAMETER) + " [m]")
-        rospy.loginfo("you have set tread(distanse between two wheels) of your robot : " + stf(TREAD) + " [m]")
+        rospy.loginfo("you have set output pulse per wheel round : " + str(PULSE_PER_ROUND) + " [ppr]")
+        rospy.loginfo("you have set diameter of the wheel : " + str(WHEEL_DIAMETER) + " [m]")
+        rospy.loginfo("you have set tread(distanse between two wheels) of your robot : " + str(TREAD) + " [m]")
     print("")
 
 
