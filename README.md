@@ -1,30 +1,29 @@
 # wheel_odometry
-## パッケージ概要
-ルンバ（Roomba）のような差動二輪ロボット（対向二輪ロボット）のホイールオドメトリを出力するシンプルなROSパッケージです。<br>
-左右それぞれのエンコーダのカウント値を受け取り、ROSの ***nav_msgs/Odometry*** 形式でオドメトリを出力します。
+## Package Overview
+A simple ROS package to publish wheel odometry data for differential 2-wheel driven robot such as Roomba.<br>
+This package will subscribe encoder count from left/right motor、and publish odometry data as native ROS message ***nav_msgs/Odometry***
 <br>
 <br>
 <br>
 
-## デモ動画
-対向二輪ロボットの例として、車輪型倒立振子を使用しています。
-以下のように、倒立振子の左右のモータエンコーダの情報を受け取り、ホイールオドメトリを計算して出力します。
-出力結果はrviz上にて確認が可能です。
+## Sample Video
+Here's sample video, using self balanced robot (inverted pendelum)
+You can also view data at RVIZ.
 <br>
 <br>
 <br>
 
-## 動作確認済みの環境
-以下の環境で動作確認しています:
+## Operating Environment
+Confirmed environments are as follows:
   * Ubuntu16.04
   * python2.7.12
   * ROS kinetic kame
-　* エンコーダ付ギヤードモータ：servo city
+　* Gear motor w/ encoder：[servo city](https://www.servocity.com/317-rpm-spur-gear-motor-w-encoder)
 <br>
 <br>
 <br>
 
-## インストール(catkin_wsという名前のディレクトリで作業している場合)
+## Installation (assume that you are working at workspace : ***catkin_ws*** )
 `   $ cd ~/catkin_ws/src`<br>
 `   $ git clone git@github.com:KTD-prototype/wheel_odometry.git`<br>
 `   $ cd ~/catkin_ws`<br>
@@ -34,14 +33,23 @@
 <br>
 
 
-## 使い方
-### エンコーダ情報の送信
-このモジュールは ***Encoder_2wheel*** というメッセージ型で ***left_encoder*** と ***right_encoder*** の２つのエンコーダ情報をメッセージとして受けとり、ホイールオドメトリの計算をします。
-使用したい対向二輪ロボットの左右エンコーダ情報を ***Encoder_2wheel*** 型としてパブリッシュするように設定してください。
-本モジュールの ***scripts/wheel_odometry_2wheel.py*** と、エンコーダ情報をパブリッシュするノードを立ち上げれば、本モジュールがエンコーダ情報をサブスクライブし、ホイールオドメトリを計算して ***nav_msgs/Odometry*** としてパブリッシュします。
+## How To Use
+### Used Message Type
+Encoder message (to subscribe)
+  Encoder_2wheel
+    int64 left_encoder
+    int64 right_encoder
+
+Odometry message (to publish)
+  [nav_msgs/Odometry](http://docs.ros.org/melodic/api/nav_msgs/html/msg/Odometry.html)
+
+### Subscribe Encoder
+This package will subscribe message type : ***Encoder_2wheel*** composed of ***left_encoder*** & ***right_encoder*** , and calculate wheel odometry.
+To use, set your robot control node to publish L/R encoder information as ***Encoder_2wheel*** type message.
+When you run ***scripts/wheel_odometry_2wheel.py*** and your robot's node to publish encoder info, this module will subscribe encoder information, calculate and publish ***nav_msgs/Odometry*** .
 
 
-### パラメータ
-  * ***~/pulse_per_round*** : ロボットのホイール1回展あたり、エンコーダが出力するパルス数です。（単位：パルス/1回転）デフォルトは作者のロボット用に723.24としています。
-  * ***~/wheel_diameter*** : ロボットのホイール直径です。（単位：m）デフォルトは作者のロボット用に0.1524m（6インチ）としています。
-  * ***~/tread*** : ロボットの左右のホイール間距離です。（単位：m）デフォルトは作者のロボット用に0.289m（28.9cm）としています。
+### Parameters
+  * ***~/pulse_per_round*** : The number of pulses that your encoder generates per a wheel rotation [pulse/round]. By default, it is set as 723.24 [pulse/round] for author's robot.
+  * ***~/wheel_diameter*** : Diameter of your robot's wheel[m]. By default, it is set as 0.1524 [m] (6inches) for author's robot.
+  * ***~/tread*** : Distance between your robot's L/R wheel[m]. By default, it is set as 0.289 [m] for author's robot.
