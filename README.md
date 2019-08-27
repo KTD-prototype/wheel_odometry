@@ -46,9 +46,9 @@ Odometry message (to publish)<br>
   * [nav_msgs/Odometry](http://docs.ros.org/melodic/api/nav_msgs/html/msg/Odometry.html)<br>
 
 ### Subscribe Encoder
-This package will subscribe message type : ***Encoder_2wheel*** composed of ***left_encoder*** & ***right_encoder*** , and calculate wheel odometry.
-To use, set your robot control node to publish L/R encoder information as ***Encoder_2wheel*** type message.
-When you run ***scripts/wheel_odometry_2wheel.py*** and your robot's node to publish encoder info, this module will subscribe encoder information, calculate and publish ***nav_msgs/Odometry*** .
+This package will subscribe message type : ***Encoder_2wheel*** composed of ***left_encoder*** & ***right_encoder*** , and calculate wheel odometry.<br>
+To use, set your robot control node to publish L/R encoder information as ***Encoder_2wheel*** type message.<br>
+When you run ***scripts/wheel_odometry_2wheel.py*** and your robot's node to publish encoder info, this module will subscribe encoder information, calculate and publish ***nav_msgs/Odometry*** .<br>
 
 
 ### Parameters
