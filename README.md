@@ -36,12 +36,13 @@ Confirmed environments are as follows:
 
 ## How To Use
 ### Used Message Type
-Encoder message (to subscribe)
-  Encoder_2wheel
-    int64 left_encoder
-    int64 right_encoder
-
-Odometry message (to publish)
+Encoder message (to subscribe)<br>
+  Encoder_2wheel<br>
+    int64 left_encoder<br>
+    int64 right_encoder<br>
+<br>
+<br>
+Odometry message (to publish)<br>
   [nav_msgs/Odometry](http://docs.ros.org/melodic/api/nav_msgs/html/msg/Odometry.html)
 
 ### Subscribe Encoder
