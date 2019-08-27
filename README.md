@@ -18,7 +18,7 @@ Confirmed environments are as follows:
   * Ubuntu16.04
   * python2.7.12
   * ROS kinetic kame <br>
-　* Gear motor w/ encoder：[servo city](https://www.servocity.com/317-rpm-spur-gear-motor-w-encoder)
+  * Gear motor w/ encoder：[servo city](https://www.servocity.com/317-rpm-spur-gear-motor-w-encoder)
 <br>
 <br>
 <br>
