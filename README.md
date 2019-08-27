@@ -42,7 +42,7 @@ Encoder message (to subscribe)<br>
     - int64 right_encoder<br>
 <br>
 Odometry message (to publish)<br>
-  * [nav_msgs/Odometry](http://docs.ros.org/melodic/api/nav_msgs/html/msg/Odometry.html)<br>
+  *[nav_msgs/Odometry](http://docs.ros.org/melodic/api/nav_msgs/html/msg/Odometry.html)<br>
 
 ### Subscribe Encoder
 This package will subscribe message type : ***Encoder_2wheel*** composed of ***left_encoder*** & ***right_encoder*** , and calculate wheel odometry.<br>
