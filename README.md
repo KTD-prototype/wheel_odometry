@@ -41,7 +41,6 @@ Encoder message (to subscribe)<br>
     - int64 left_encoder<br>
     - int64 right_encoder<br>
 <br>
-<br>
 Odometry message (to publish)<br>
   * [nav_msgs/Odometry](http://docs.ros.org/melodic/api/nav_msgs/html/msg/Odometry.html)<br>
 
