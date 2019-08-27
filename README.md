@@ -37,9 +37,9 @@ Confirmed environments are as follows:
 ## How To Use
 ### Used Message Type
 Encoder message (to subscribe)<br>
-  Encoder_2wheel<br>
-    int64 left_encoder<br>
-    int64 right_encoder<br>
+  * Encoder_2wheel<br>
+    ** int64 left_encoder<br>
+    ** int64 right_encoder<br>
 <br>
 <br>
 Odometry message (to publish)<br>
