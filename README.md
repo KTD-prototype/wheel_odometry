@@ -24,7 +24,7 @@ Confirmed environments are as follows:
 <br>
 
 ## Installation
-(assume that you are working at workspace : ***catkin_ws*** )
+(assume that you are working at workspace : ***catkin_ws*** )<br>
 `   $ cd ~/catkin_ws/src`<br>
 `   $ git clone git@github.com:KTD-prototype/wheel_odometry.git`<br>
 `   $ cd ~/catkin_ws`<br>
