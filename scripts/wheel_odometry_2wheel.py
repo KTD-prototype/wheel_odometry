@@ -155,8 +155,8 @@ if __name__ == '__main__':
     wheel_odometry_2wheel_pub = rospy.Publisher(
         'wheel_odometry_2wheel', Odometry, queue_size=1, latch=True)
     wheel_odometry_2wheel = Odometry()
-    wheel_odometry_2wheel.header.frame_id = 'map'
-    wheel_odometry_2wheel.child_frame_id = 'frame'
+    wheel_odometry_2wheel.header.frame_id = 'odom'
+    wheel_odometry_2wheel.child_frame_id = 'base_footprint'
 
     # subscribe encoder information and call function to calculate odometry
     rospy.Subscriber('encoder_2wheel', Encoder_2wheel,
