@@ -58,16 +58,16 @@ def set_parameters():
     # SIPCYCLE : number of milliseconds between two consecutive server information packets from your robot (you have to refer the source of encoder pulse that how frequent does it publishes the pulse)
     FREQ = 100
     SIPCYCLE = 1000 / FREQ
-    # error in determining velocity could come from missing an encoder pulse in a cycle
+    # error in determining velocity could come from missing an encoder pulse in a cycle [mm/milliseconds]
     missed_pulse_per_cycle = 1/(TICKSMM * SIPCYCLE)
-    # double it to consider other source of errors (e.g. backlash of gears) [mm/nilliseconds]
+    # double it to consider other source of errors (e.g. backlash of gears) [mm/milliseconds]
     missed_pulse_per_cycle = 2 * missed_pulse_per_cycle
-    # regarding missed_pulse_per_cycle as maximum error = 3sigma
+    # regarding missed_pulse_per_cycle as maximum error = 3sigma [mm/milliseconds]
     sigma = missed_pulse_per_cycle / 3
-    C = sigma ** 2
+    C = sigma ** 2  # [mm^2/milliseconds^2] = [m^2/sec^2]
     # calculate covariance
     cov_lin_vel = ((1.0 / 2.0) ** 2) * 2 * C
-    cov_ang_vel = ((1.0 / TREAD) ** 2) * 2 * C
+    cov_ang_vel = ((1.0 / TREAD) ** 2) * 2 * C  # [1/sec^2]
 
 
 def callback_calculate_odometry(encoder_2wheel):
@@ -171,6 +171,14 @@ def store_to_topic(odometry_data_toStore):
     wheel_odometry_2wheel.pose.pose.orientation.w = odometry_data_toStore[8]
 
     # covariance
+    # covariance for pose
+    wheel_odometry_2wheel.pose.covariance[0] = 0.1
+    wheel_odometry_2wheel.pose.covariance[7] = 0.1
+    wheel_odometry_2wheel.pose.covariance[14] = 1000000
+    wheel_odometry_2wheel.pose.covariance[21] = 1000000
+    wheel_odometry_2wheel.pose.covariance[28] = 1000000
+    wheel_odometry_2wheel.pose.covariance[35] = 0.2
+    # covariance for twist
     wheel_odometry_2wheel.twist.covariance[0] = cov_lin_vel
     wheel_odometry_2wheel.twist.covariance[7] = cov_lin_vel
     wheel_odometry_2wheel.twist.covariance[14] = 1000000
